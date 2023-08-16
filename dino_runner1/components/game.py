@@ -32,6 +32,7 @@ class Game:
     def execute(self):
         self.running = True
         while self.running:
+            
              if not self.playing:
                 self.show_menu()
         pygame.display.quit()
@@ -63,12 +64,12 @@ class Game:
     
     def update_score(self):
         self.score += 1
-        if self.score % 100 == 0:
+        if self.score % 100 == 0 :
            self.game_speed += 5
 
     def draw(self):
         self.clock.tick(FPS)
-        self.screen.fill((255, 255, 255))
+        self.screen.fill((0, 128, 255))
         self.draw_background()
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
