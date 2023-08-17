@@ -1,6 +1,6 @@
 import pygame
 
-from dino_runner1.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
+from dino_runner1.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE,BG2
 
 from dino_runner1.components.dinosaur import Dinosaur
 
@@ -67,10 +67,16 @@ class Game:
         if self.score % 100 == 0 :
            self.game_speed += 5
 
+      
+        
+
+        
+        
     def draw(self):
+        imag = pygame.transform.scale(BG2,(SCREEN_WIDTH,SCREEN_HEIGHT))
         self.clock.tick(FPS)
-        self.screen.fill((0, 128, 255))
-        self.draw_background()
+        self.screen.blit(imag,(0,0))
+      
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
         self.draw_score()
@@ -79,25 +85,30 @@ class Game:
         pygame.display.update()
         pygame.display.flip()
 
+
     def draw_background(self):
         image_width = BG.get_width()
         self.screen.blit(BG, (self.x_pos_bg, self.y_pos_bg))
         self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
+        
         if self.x_pos_bg <= image_width:
            self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
            self.x_pos_bg = 0
            self.x_pos_bg -= self.game_speed
 
+    
     def draw_score(self):
         draw_message_component(
-            f"PONTUAÇÃO:{self.score}",
+            f"PONTUAÇÃO : {self.score}",
             self.screen,
             pos_x_center = 1000,
-            pos_y_center = 50
+            pos_y_center = 50,
+            font_color="White"
         )
 
     def draw_power_up_time(self):
         if self.player.has_power_up:
+           self.game_speed += 10
            time_to_show = round((self.player.power_up_time - pygame.time.get_ticks()) / 1000, 2 )
            if time_to_show >= 0:
               draw_message_component(
@@ -124,27 +135,34 @@ class Game:
       
 
     def show_menu(self):
-        self.screen.fill((255, 255, 255))
+        imag1 = pygame.transform.scale(BG2,(SCREEN_WIDTH,SCREEN_HEIGHT))
+        self.clock.tick(FPS)
+        self.screen.blit(imag1,(0,0))
         half_screen_height = SCREEN_HEIGHT // 2
         half_scree_width = SCREEN_WIDTH // 2
         
       
         if self.death_count == 0: 
             
-           draw_message_component("APERTE QUALQUER TECLA PARA INICIAR", self.screen)
+           draw_message_component("APERTE QUALQUER TECLA PARA INICIAR ", self.screen,
+           pos_y_center = half_screen_height - 100,
+           font_color = "white"  
+                                  )
         else: 
-           draw_message_component("APERTE QUALQUER TECLA PARA REINICIAR", self.screen, pos_x_center = half_screen_height + 140)
+           draw_message_component("", self.screen, pos_x_center = half_screen_height + 140)
            
            draw_message_component(
-               f"SUA PONTUAÇÃO: {self.score}",
+               f"SUA PONTUAÇÃO : {self.score} ",
                self.screen,
-               pos_y_center = half_scree_width - 150
+               pos_y_center = half_scree_width - 150,
+               font_color = "white"
             )
            
            draw_message_component(
-                f"Death count: {self.death_count}",
+                f"APERTE QUALQUER TECLA PARA REINICIAR" ,
                 self.screen,
-                pos_y_center = half_screen_height - 100
+                pos_y_center = half_screen_height - 100,
+                font_color = "white"
             )
            
         self.screen.blit(ICON, ( half_scree_width - 40, half_screen_height - 30))
